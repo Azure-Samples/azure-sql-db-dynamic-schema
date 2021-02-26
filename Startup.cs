@@ -10,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 namespace Azure.SQLDB.Samples.DynamicSchema
@@ -35,11 +34,6 @@ namespace Azure.SQLDB.Samples.DynamicSchema
                     builder.WithOrigins("http://localhost:5500").AllowAnyMethod().AllowAnyHeader()
                 );
             });
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "azure_sql_db_dynamic_schema", Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,8 +42,6 @@ namespace Azure.SQLDB.Samples.DynamicSchema
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Azure SQL DB Dynamic Schema Sample v1"));
             }
 
             //app.UseHttpsRedirection();
