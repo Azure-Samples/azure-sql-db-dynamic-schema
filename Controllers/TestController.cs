@@ -12,31 +12,12 @@ using System.Linq;
 
 namespace Azure.SQLDB.Samples.DynamicSchema
 {
-    public enum Style
-    {
-        Classic,
-        Hybrid,
-        Document
-    }
-
-    public enum Verb
-    {
-        Get,
-        Post,
-        Put,
-        Delete,
-        Patch
-    }
+    
 
     [ApiController]
     [Route("[controller]")]
     public class TestController : ControllerBase
     {
-        private class DatabaseResult
-        {
-            public string Todo = string.Empty;
-            public string Extension = string.Empty;
-        }
 
         private readonly ILogger<TestController> _logger;
         private readonly IConfiguration _config;

@@ -4,6 +4,22 @@ using Microsoft.AspNetCore.Http;
 
 namespace Azure.SQLDB.Samples.DynamicSchema
 {
+    public enum Style
+    {
+        Classic,
+        Hybrid,
+        Document
+    }
+
+    public enum Verb
+    {
+        Get,
+        Post,
+        Put,
+        Delete,
+        Patch
+    }
+    
     public static class Utils
     {
         public static void EnrichJsonResult(HttpRequest request, JToken result, string test)

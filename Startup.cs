@@ -29,7 +29,13 @@ namespace Azure.SQLDB.Samples.DynamicSchema
         {
             services.AddControllers().AddNewtonsoftJson();
 
-            services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin", builder =>
+                    builder.WithOrigins("http://localhost:5500").AllowAnyMethod().AllowAnyHeader()
+                );
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "azure_sql_db_dynamic_schema", Version = "v1" });
@@ -43,7 +49,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "azure_sql_db_dynamic_schema v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Azure SQL DB Dynamic Schema Sample v1"));
             }
 
             //app.UseHttpsRedirection();
@@ -51,6 +57,8 @@ namespace Azure.SQLDB.Samples.DynamicSchema
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("AllowOrigin");
 
             app.UseEndpoints(endpoints =>
             {

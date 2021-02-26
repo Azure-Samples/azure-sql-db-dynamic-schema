@@ -8,22 +8,43 @@ using Microsoft.Extensions.Configuration;
 using Dapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace Azure.SQLDB.Samples.DynamicSchema
 {
     [ApiController]
     [Route("[controller]")]
-    public class ToDoClassicController : ControllerBase
+    public class ToDoDocumentController : ControllerBase
     {
-        private readonly ILogger<ToDoClassicController> _logger;
+        private readonly ILogger<ToDoDocumentController> _logger;
         private readonly IConfiguration _config;
 
-        public ToDoClassicController(IConfiguration config, ILogger<ToDoClassicController> logger)
+        public ToDoDocumentController(IConfiguration config, ILogger<ToDoDocumentController> logger)
         {
             _logger = logger;
             _config = config;
         }
         
+        private JToken CreatePayload(JObject sourceDocument)
+        {
+            JObject d = (JObject)(sourceDocument.DeepClone());
+
+            var payload = new JObject {
+                ["id"] = d["id"],
+                ["title"] = d["title"],
+                ["completed"] = d["completed"]
+            };
+
+            d.Property("id")?.Remove();
+            d.Property("title")?.Remove();
+            d.Property("completed")?.Remove();
+            d.Property("url")?.Remove();
+
+            payload.Add("extension", d);
+
+            return payload;
+        }
+
         private async Task<JToken> ExecuteProcedure(string verb, JToken payload)
         {
             JToken result = new JArray();
@@ -33,13 +54,25 @@ namespace Azure.SQLDB.Samples.DynamicSchema
                 DynamicParameters parameters = new DynamicParameters();
                 if (payload != null) parameters.Add("payload", payload.ToString());                
 
-                string stringResult = await conn.ExecuteScalarAsync<string>(
-                    sql: $"web.{verb}_todo_classic",
+                var resultSet = await conn.QueryAsync(
+                    sql: $"web.{verb}_todo_document",
                     param: parameters,
                     commandType: CommandType.StoredProcedure
                 );
 
-                if (!string.IsNullOrEmpty(stringResult)) result = JToken.Parse(stringResult);
+                var jr = new JArray();
+                resultSet.ToList().ForEach(i =>
+                {
+                    JObject todo = JObject.Parse(i.todo);
+                    if (i.extension != null ) {
+                        JObject extension = JObject.Parse(i.extension);
+                        todo.Merge(extension);
+                    }
+
+                    jr.Add(todo);
+                });
+
+                result = (jr.Count() == 1) ? jr[0] : jr;
             }
 
             return result;            
@@ -60,12 +93,18 @@ namespace Azure.SQLDB.Samples.DynamicSchema
             
             var result = await ExecuteProcedure("get", payload);            
             
+            // If requesting ALL todo, always return an array
+            if (id == null && result.Type == JTokenType.Object)
+                result = new JArray() { result };
+
             return EnrichJsonResult(result);
         }
 
         [HttpPost]        
-        public async Task<JToken> Post([FromBody]JToken payload)
+        public async Task<JToken> Post([FromBody]ToDo body)
         {
+            var payload = JToken.FromObject(body);
+
             var result = await ExecuteProcedure("post", payload);                                
                         
             return EnrichJsonResult(result);
@@ -73,14 +112,27 @@ namespace Azure.SQLDB.Samples.DynamicSchema
 
         [HttpPatch]     
         [Route("{id}")]   
-        public async Task<JToken> Patch(int id, [FromBody]JToken body)
+        public async Task<JToken> Patch(int id, [FromBody]ToDo body)
         {
+            // WARNING! No transaction or optimistic concurrency management here!
+            // WARNING! Add it if this is going to be used in production code!
+            // WARNING! Use an explicit transaction or an ETAG
+
+            // Load existing todo  
+            var targetJson = (JObject)(await ExecuteProcedure("get", new JObject { ["id"] = id }));
+
+            // Get new todo
+            var sourceJson = JObject.FromObject(body);
+
+            // Patch
+            ((JObject)targetJson).Merge(sourceJson);
+
+            // Save back to database
             var payload = new JObject
             {
                 ["id"] = id,
-                ["todo"] = body
+                ["todo"] = targetJson
             };
-
             JToken result = await ExecuteProcedure("patch", payload);                                
                         
             return EnrichJsonResult(result);
@@ -88,7 +140,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
 
         [HttpDelete]     
         [Route("{id?}")]   
-        public async Task<JToken> Patch(int? id)
+        public async Task<JToken> Delete(int? id)
         {            
             var payload = id.HasValue ? new JObject { ["id"] = id.Value } : null;
             
