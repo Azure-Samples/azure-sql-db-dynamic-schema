@@ -1,6 +1,6 @@
 ## [project-title] Changelog
 
-<a name="x.y.z"></a>
+<a name="1.0.0"></a>
 # x.y.z (yyyy-mm-dd)
 
 *Features*
