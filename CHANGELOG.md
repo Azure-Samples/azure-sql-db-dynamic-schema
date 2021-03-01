@@ -1,13 +1,5 @@
-## [project-title] Changelog
+# Azure SQL Dynamic Schema Sample Changelog
 
 <a name="1.0.0"></a>
-# x.y.z (yyyy-mm-dd)
-
-*Features*
-* ...
-
-*Bug Fixes*
-* ...
-
-*Breaking Changes*
-* ...
+## 1.0.0 (2021-03-01)
+First Release
