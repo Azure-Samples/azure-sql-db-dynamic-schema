@@ -13,7 +13,7 @@ using System.Linq;
 namespace Azure.SQLDB.Samples.DynamicSchema
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("todo/hybrid")]
     public class ToDoHybridController : ControllerBase
     {
         private readonly ILogger<ToDoHybridController> _logger;

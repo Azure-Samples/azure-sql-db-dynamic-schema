@@ -13,7 +13,7 @@ using System.Linq;
 namespace Azure.SQLDB.Samples.DynamicSchema
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("todo/document")]
     public class ToDoDocumentController : ControllerBase
     {
         private readonly ILogger<ToDoDocumentController> _logger;

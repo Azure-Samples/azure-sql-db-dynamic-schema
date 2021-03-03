@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 namespace Azure.SQLDB.Samples.DynamicSchema
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("todo/classic")]
     public class ToDoClassicController : ControllerBase
     {
         private readonly ILogger<ToDoClassicController> _logger;
