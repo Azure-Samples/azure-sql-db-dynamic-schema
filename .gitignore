@@ -350,5 +350,6 @@ MigrationBackup/
 .ionide/
 
 # Custom
+dynamic-schema.code-workspace
 appsettings.Development.json
 .env
