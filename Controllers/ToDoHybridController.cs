@@ -52,7 +52,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
             using (var conn = new SqlConnection(_config.GetConnectionString("AzureSQL")))
             {
                 DynamicParameters parameters = new DynamicParameters();
-                if (payload != null) parameters.Add("payload", payload.ToString());                
+                if (payload != null) parameters.Add("payload", payload.ToString(Formatting.None));                
 
                 var resultSet = await conn.QueryAsync(
                     sql: $"web.{verb}_todo_hybrid",

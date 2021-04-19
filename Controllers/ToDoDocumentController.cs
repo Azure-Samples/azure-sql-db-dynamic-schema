@@ -23,27 +23,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
         {
             _logger = logger;
             _config = config;
-        }
-        
-        private JToken CreatePayload(JObject sourceDocument)
-        {
-            JObject d = (JObject)(sourceDocument.DeepClone());
-
-            var payload = new JObject {
-                ["id"] = d["id"],
-                ["title"] = d["title"],
-                ["completed"] = d["completed"]
-            };
-
-            d.Property("id")?.Remove();
-            d.Property("title")?.Remove();
-            d.Property("completed")?.Remove();
-            d.Property("url")?.Remove();
-
-            payload.Add("extension", d);
-
-            return payload;
-        }
+        }        
 
         private async Task<JToken> ExecuteProcedure(string verb, JToken payload)
         {
@@ -52,7 +32,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
             using (var conn = new SqlConnection(_config.GetConnectionString("AzureSQL")))
             {
                 DynamicParameters parameters = new DynamicParameters();
-                if (payload != null) parameters.Add("payload", payload.ToString());                
+                if (payload != null) parameters.Add("payload", payload.ToString(Formatting.None));                
 
                 var resultSet = await conn.QueryAsync(
                     sql: $"web.{verb}_todo_document",
@@ -101,7 +81,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
         }
 
         [HttpPost]        
-        public async Task<JToken> Post([FromBody]ToDo body)
+        public async Task<JToken> Post([FromBody]JToken body) // Or use ToDo instead of JToken if you want to validate the schema
         {
             var payload = JToken.FromObject(body);
 
@@ -112,7 +92,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
 
         [HttpPatch]     
         [Route("{id}")]   
-        public async Task<JToken> Patch(int id, [FromBody]ToDo body)
+        public async Task<JToken> Patch(int id, [FromBody]JToken body) // Or use ToDo instead of JToken if you want to validate the schema
         {
             // WARNING! No transaction or optimistic concurrency management here!
             // WARNING! Add it if this is going to be used in production code!

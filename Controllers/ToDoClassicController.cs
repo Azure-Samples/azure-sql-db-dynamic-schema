@@ -88,7 +88,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
 
         [HttpDelete]     
         [Route("{id?}")]   
-        public async Task<JToken> Patch(int? id)
+        public async Task<JToken> Delete(int? id)
         {            
             var payload = id.HasValue ? new JObject { ["id"] = id.Value } : null;
             

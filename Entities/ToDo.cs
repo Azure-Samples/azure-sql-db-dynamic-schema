@@ -14,8 +14,8 @@ namespace Azure.SQLDB.Samples.DynamicSchema
         [JsonProperty("completed")]
         public bool Completed { get; set; }
         
-        [JsonProperty("order")]
-        public int Order { get; set; }
+        // [JsonProperty("order")]
+        // public int Order { get; set; }
 
         [JsonProperty("url")]
         public string Url { get; set; }
