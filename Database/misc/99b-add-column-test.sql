@@ -1,7 +1,13 @@
 drop table if exists dbo.todo_test;
 go
 
-select * into dbo.todo_test from dbo.todo_sample;
+create table dbo.todo_test
+(
+	id int not null primary key default (next value for [global_sequence]),
+	todo nvarchar(100) not null,
+	completed tinyint not null default (0),
+	[order] int null
+)
 go
 
 with cte as
@@ -19,11 +25,17 @@ from
 	cte
 ;
 
+select format(count(*), 'n') from dbo.[todo_test];
+go
+
 select top (10) * from dbo.[todo_test];
 go
 
 alter table dbo.[todo_test] 
 add createdOn datetime2 null
+go
+
+select top (10) * from dbo.[todo_test];
 go
 
 

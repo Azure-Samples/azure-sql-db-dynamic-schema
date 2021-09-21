@@ -22,9 +22,9 @@ namespace Azure.SQLDB.Samples.DynamicSchema
     
     public static class Utils
     {
-        public static void EnrichJsonResult(HttpRequest request, JToken result, string test)
+        public static void EnrichJsonResult(HttpRequest request, JToken result, string path)
         {
-            var baseUrl = request.Scheme + "://" + request.Host + $"/{test}";
+            var baseUrl = request.Scheme + "://" +  request.Host + "/" + path;
 
             var InjectUrl = new Action<JObject>(i =>
             {

@@ -81,7 +81,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
         private JToken EnrichJsonResult(JToken result)
         {
             var e = result.DeepClone();
-            Utils.EnrichJsonResult(HttpContext.Request, e, RouteData.Values["controller"].ToString());
+            Utils.EnrichJsonResult(HttpContext.Request, e, "todo/hybrid");
             return e;
         }
 

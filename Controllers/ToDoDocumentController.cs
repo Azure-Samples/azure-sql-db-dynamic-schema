@@ -9,6 +9,7 @@ using Dapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Azure.SQLDB.Samples.DynamicSchema
 {
@@ -42,14 +43,8 @@ namespace Azure.SQLDB.Samples.DynamicSchema
 
                 var jr = new JArray();
                 resultSet.ToList().ForEach(i =>
-                {
-                    JObject todo = JObject.Parse(i.todo);
-                    if (i.extension != null ) {
-                        JObject extension = JObject.Parse(i.extension);
-                        todo.Merge(extension);
-                    }
-
-                    jr.Add(todo);
+                {                    
+                    jr.Add(JObject.Parse(i.todo));
                 });
 
                 result = (jr.Count() == 1) ? jr[0] : jr;
@@ -61,7 +56,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
         private JToken EnrichJsonResult(JToken result)
         {
             var e = result.DeepClone();
-            Utils.EnrichJsonResult(HttpContext.Request, e, RouteData.Values["controller"].ToString());
+            Utils.EnrichJsonResult(HttpContext.Request, e, "todo/document");            
             return e;
         }
 

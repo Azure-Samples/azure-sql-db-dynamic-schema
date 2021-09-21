@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using System.Linq;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Dapper;
@@ -47,8 +48,8 @@ namespace Azure.SQLDB.Samples.DynamicSchema
 
         private JToken EnrichJsonResult(JToken result)
         {
-            var e = result.DeepClone();
-            Utils.EnrichJsonResult(HttpContext.Request, e, RouteData.Values["controller"].ToString());
+            var e = result.DeepClone();            
+            Utils.EnrichJsonResult(HttpContext.Request, e, "todo/classic");            
             return e;
         }
 

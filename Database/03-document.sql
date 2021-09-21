@@ -71,7 +71,7 @@ exec [web].[get_todo_document] @newPayload;
 go
 
 /*
-PATCH
+	PATCH
 */
 create or alter procedure [web].[patch_todo_document]
 @payload nvarchar(max)
