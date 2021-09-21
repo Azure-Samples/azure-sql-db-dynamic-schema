@@ -14,6 +14,7 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
+            "envFile": "${workspaceFolder}/.env",
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
