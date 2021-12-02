@@ -60,6 +60,12 @@ go
 exec [web].[get_todo_document] '{"id":1}';
 go
 
+/*
+	Go to the extreme end, just having one "document" column, 
+	and then create the "id" column as a calculated column.
+	Also add needed indexes to have good performance.
+*/
+
 select * into dbo.todo_document_2 from dbo.[todo_document]
 go
 
