@@ -10,8 +10,7 @@ products:
 - dotnet
 - dotnet-core
 - azure-web-app
-description: "Real-Time Serverless GeoSpatial Public Transportation GeoFencing Solution"
-urlFragment: "azure-sql-db-serverless-geospatial"
+description: "Dynamic Schema Management With Azure SQL"
 ---
 
 # Dynamic Schema Management With Azure SQL
