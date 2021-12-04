@@ -31,3 +31,7 @@ A sample project that shows how to deal with dynamic schema in Azure SQL, using 
 - An Hybrid Table with some well-known columns an "Extension" column to hold arbitrary JSON data
 - A full "Document" approach where data is fully stored as JSON document
 
+Detailed explanation of concept and example is available in this recorded session:
+
+[![YouTube recording](./_docs/screenshot.jpg)](https://youtu.be/tHBeJIAPr70?t=34)
+https://youtu.be/tHBeJIAPr70?t=34
