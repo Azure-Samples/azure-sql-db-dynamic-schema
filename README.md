@@ -8,8 +8,7 @@ products:
 - azure-sql-database
 - azure
 - dotnet
-- dotnet-core
-- azure-web-apps
+- azure-app-service
 description: "Dynamic Schema Management With Azure SQL"
 urlFragment: "dynamic-schema-management-with-azure-sql"
 ---
