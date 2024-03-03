@@ -16,20 +16,11 @@ namespace Azure.SQLDB.Samples.DynamicSchema
     [Route("todo/classic")]
     public class ToDoClassicController : ControllerBase
     {
-        private readonly ILogger<ToDoClassicController> _logger;
-        private readonly IConfiguration _config;
-
-        public ToDoClassicController(IConfiguration config, ILogger<ToDoClassicController> logger)
-        {
-            _logger = logger;
-            _config = config;
-        }
-        
         private async Task<JToken> ExecuteProcedure(string verb, JToken payload)
         {
             JToken result = new JArray();
 
-            using (var conn = new SqlConnection(_config.GetConnectionString("AzureSQL")))
+            using (var conn = new SqlConnection(Environment.GetEnvironmentVariable("MSSQL")))
             {
                 DynamicParameters parameters = new DynamicParameters();
                 if (payload != null) parameters.Add("payload", payload.ToString());                

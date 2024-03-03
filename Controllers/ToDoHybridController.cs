@@ -16,15 +16,6 @@ namespace Azure.SQLDB.Samples.DynamicSchema
     [Route("todo/hybrid")]
     public class ToDoHybridController : ControllerBase
     {
-        private readonly ILogger<ToDoHybridController> _logger;
-        private readonly IConfiguration _config;
-
-        public ToDoHybridController(IConfiguration config, ILogger<ToDoHybridController> logger)
-        {
-            _logger = logger;
-            _config = config;
-        }
-        
         private JToken CreatePayload(JObject sourceDocument)
         {
             JObject d = (JObject)(sourceDocument.DeepClone());
@@ -49,7 +40,7 @@ namespace Azure.SQLDB.Samples.DynamicSchema
         {
             JToken result = new JArray();
 
-            using (var conn = new SqlConnection(_config.GetConnectionString("AzureSQL")))
+            using (var conn = new SqlConnection(Environment.GetEnvironmentVariable("MSSQL")))
             {
                 DynamicParameters parameters = new DynamicParameters();
                 if (payload != null) parameters.Add("payload", payload.ToString(Formatting.None));                
