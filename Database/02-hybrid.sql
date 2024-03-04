@@ -16,7 +16,6 @@ go
 alter table [dbo].[todo_hybrid] add constraint ck__todo_hybrid__other check (isjson([extension]) = 1)
 go
 
-
 /*
 	GET
 */
@@ -27,6 +26,16 @@ begin
 
 -- return all
 if (@payload = '' or @payload is null) begin;	
+	/*
+		With SQL Server 2022 & Azure SQL
+	*/
+	/*
+	select
+		json_object('id':id, 'title':todo, 'completed':cast(completed as bit)),
+		json_query(extension) as extension
+	from 
+		dbo.[todo_hybrid] as o
+	*/
 	select 
 		json_query((select id, todo as title, cast(completed as bit) as completed from dbo.todo_hybrid as i where o.id = i.id for json auto, without_array_wrapper)) as todo,
 		json_query(extension) as extension
