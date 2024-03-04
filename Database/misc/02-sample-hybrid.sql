@@ -1,14 +1,14 @@
 delete from dbo.[todo_hybrid];
 go
 
-declare @t nvarchar(max) = '{
+declare @t nvarchar(max) = json_query('{
 	"title": "test",
 	"completed": 0,
 	"extension": {
 		"order": 1,
 		"createdOn": "2020-10-25 10:00:00"	
 	}
-}';
+}');
 
 insert into 
 	dbo.[todo_hybrid] (todo, completed, [extension])
@@ -25,14 +25,14 @@ from
 	)
 go
 
-declare @t2 nvarchar(max) = '{
+declare @t2 nvarchar(max) = json_query('{
 	"title": "another test",
 	"completed": 1,
 	"extension": {
 		"order": 2,
 		"createdOn": "2020-10-24 22:00:00"	
 	}
-}';
+}');
 
 insert into 
 	dbo.[todo_hybrid] (todo, completed, [extension])
