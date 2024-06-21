@@ -35,3 +35,6 @@ Detailed explanation of concept and example is available in this recorded sessio
 
 [![YouTube recording](./_docs/screenshot.jpg)](https://youtu.be/tHBeJIAPr70?t=34)
 https://youtu.be/tHBeJIAPr70?t=34
+
+
+If you prefer using Entity Framework to access the databasem, you can find the same sample using EF Core in the [https://github.com/Azure-Samples/azure-sql-db-dynamic-schema] repo.
